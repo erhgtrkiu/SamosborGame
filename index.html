@@ -18,6 +18,7 @@
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://esm.sh" crossorigin>
 <title>Самосбор: Ликвидатор — Этаж 1324</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -202,12 +203,11 @@ window.__fatal=function(kind){var ru=/^(ru|be|uk|kk)/i.test(navigator.language||
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
 <script>window.THREE||document.write('<script src="vendor/three.min.js"><\/script>')</script>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js" crossorigin="anonymous"></script>
 <script>
 (function(){var ok=false;try{var c=document.createElement('canvas');ok=!!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')))}catch(e){}
  if(!window.THREE){window.__fatal('three');return}
  if(!ok){window.__fatal('webgl');return}
- document.write('<script src="app.js?v=1.1.0"><\/script>')})();
+ document.write('<script src="app.js?v=1.1.4"><\/script>')})();
 </script>
 <script>
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});

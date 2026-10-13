@@ -1,7 +1,7 @@
 /* ===== app.js — Самосбор: Ликвидатор — Этаж 1324 · release 1.0.0 ===== */
 'use strict';
 /* ===== RELEASE: режим разработчика только по ?dev=1 ===== */
-const __VERSION='1.1.0';
+const __VERSION='1.1.4';
 const __DEV=(()=>{try{const q=new URLSearchParams(location.search);if(q.has('dev')){const on=q.get('dev')!=='0';localStorage.setItem('samosbor1324_dev',on?'1':'0');return on}return localStorage.getItem('samosbor1324_dev')==='1'}catch(e){return false}})();
 if(!__DEV){const n=()=>{};console.info=n;console.log=n;console.debug=n;console.warn=n}
 /* ===== I18N: ru / en / zh / pl ===== */
@@ -616,14 +616,61 @@ const _st3=startGame;startGame=function(){disposePreview();_st3();G.seed=ri(1,1e
 // ===== ТЕЛО ЛИКВИДАТОРА =====
 const smearTex=canvasTex(128,256,(x,w,h)=>{x.clearRect(0,0,w,h);blot(x,w,h*.6,6,'rgba(70,5,5,.8)',15,40);drip(x,w,h*.3,h,14,'rgba(70,5,5,.75)');x.fillStyle='rgba(60,5,5,.7)';for(let i=0;i<4;i++){x.fillRect(30+i*14,40+i*6,6,90)}});
 const smearM=new THREE.MeshBasicMaterial({map:smearTex,transparent:true,depthWrite:false});
-function corpseMesh(f){const c=new THREE.Group(),S=GM.suit,K=GM.glove,BK=M.black;const mk=(geo,mat,x,y,z,p)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);(p||c).add(m);return m};
-mk(new THREE.BoxGeometry(.34,.18,.28),S,0,.11,.02);mk(new THREE.BoxGeometry(.36,.05,.3),BK,0,.2,.02);
-const tor=new THREE.Group();tor.position.set(0,.2,.06);tor.rotation.set(.3,0,.16);c.add(tor);mk(new THREE.CylinderGeometry(.17,.15,.52,12),S,0,.27,0,tor);const rig=mk(new THREE.BoxGeometry(.3,.24,.07),BK,0,.3,-.15,tor);for(const px of[-.09,0,.09])mk(new THREE.BoxGeometry(.075,.09,.05),S,px,.26,-.2,tor);mk(new THREE.BoxGeometry(.06,.04,.01),new THREE.MeshBasicMaterial({color:0xd8b020}),.1,.4,-.19,tor);
-const hd=new THREE.Group();hd.position.set(0,.62,0);hd.rotation.set(.45,0,.55);tor.add(hd);mk(new THREE.CylinderGeometry(.05,.06,.1,8),S,0,0,0,hd);mk(new THREE.SphereGeometry(.115,14,12),S,0,.12,0,hd).scale.set(1,1.1,1.05);mk(new THREE.SphereGeometry(.085,12,10),BK,0,.1,-.08,hd).scale.set(1,1.1,.8);for(const ex of[-.042,.042]){const l=mk(new THREE.CircleGeometry(.028,14),M.glass,ex,.13,-.152,hd);l.rotation.y=Math.PI;mk(new THREE.TorusGeometry(.03,.007,6,14),M.metal,ex,.13,-.15,hd)}const fl=mk(new THREE.CylinderGeometry(.038,.038,.09,12),M.metal,0,.02,-.15,hd);fl.rotation.x=Math.PI/2+.5;const hose=mk(new THREE.CylinderGeometry(.015,.015,.35,6),BK,.06,-.12,-.1,hd);hose.rotation.set(.6,0,.5);
-for(const k of[-1,1]){const sh=new THREE.Group();sh.position.set(k*.2,.46,0);sh.rotation.set(k<0?.25:-.9,0,k*.18);tor.add(sh);const ua=mk(new THREE.CylinderGeometry(.052,.045,.3,8),S,0,-.15,0,sh);const el=new THREE.Group();el.position.set(0,-.3,0);el.rotation.x=k<0?.2:-1.1;sh.add(el);mk(new THREE.CylinderGeometry(.045,.04,.27,8),S,0,-.135,0,el);mk(new THREE.SphereGeometry(.05,8,8),K,0,-.3,0,el).scale.set(1,1.3,.8)}
-for(const k of[-1,1]){const bend=k<0?0:.6,hp=new THREE.Group();hp.position.set(k*.1,.1,-.02);hp.rotation.set(-Math.PI/2+bend,k*.12,0);c.add(hp);mk(new THREE.CylinderGeometry(.07,.06,.45,10),S,0,.225,0,hp);const kn=new THREE.Group();kn.position.set(0,.45,0);kn.rotation.x=-bend*2;hp.add(kn);mk(new THREE.CylinderGeometry(.058,.05,.42,10),S,0,.21,0,kn);const bt=mk(new THREE.BoxGeometry(.11,.2,.13),BK,0,.47,.03,kn);bt.rotation.x=.2}
-const pool=new THREE.Mesh(new THREE.CircleGeometry(.85,24),splatMat);pool.rotation.x=-Math.PI/2;pool.position.set(.05,.012,-.25);pool.scale.set(1,1.3,1);c.add(pool);const sm=new THREE.Mesh(new THREE.PlaneGeometry(.55,1.1),smearM);sm.position.set(0,.75,.27);sm.rotation.y=Math.PI;c.add(sm);
-const fl2=mk(new THREE.CylinderGeometry(.025,.03,.2,10),M.metal,.42,.03,-.55);fl2.rotation.set(0,0,Math.PI/2);fl2.rotation.y=.7;mk(new THREE.CircleGeometry(.024,10),M.lamp,.52,.03,-.48).rotation.y=-.8;const bag=mk(new THREE.BoxGeometry(.34,.22,.16),M.fab[1],-.45,.11,-.08);bag.rotation.y=.4;for(let i=0;i<4;i++){const sc=mk(new THREE.CylinderGeometry(.0045,.0045,.018,6),GM.brass,rnd(-.6,.6),.006,rnd(-.9,-.3));sc.rotation.z=Math.PI/2;sc.rotation.y=rnd(0,3)}for(let i=0;i<3;i++){const pp=mk(new THREE.PlaneGeometry(.18,.24),M.paper,rnd(-.7,.7),.014+i*.001,rnd(-1,-.4));pp.rotation.x=-Math.PI/2;pp.rotation.z=rnd(0,3)}
+function corpseMesh(f){const c=new THREE.Group(),S=GM.suit,K=GM.glove,BK=M.black;
+const R=seeded((G&&G.floor||1)*53+11);const rr=(a,b)=>a+R()*(b-a);
+const fold=new THREE.MeshPhongMaterial({color:S.color?S.color.clone().multiplyScalar(.72):0x3a4630,shininess:6});
+const rub=new THREE.MeshPhongMaterial({color:0x17191a,shininess:38,specular:0x2a2a2a});
+const bloodM=new THREE.MeshPhongMaterial({color:0x3a0606,shininess:70,specular:0x401010,transparent:true,opacity:.92,depthWrite:false});
+const mk=(geo,mat,x,y,z,p)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);(p||c).add(m);return m};
+const G0=(x,y,z,rx,ry,rz,p)=>{const g=new THREE.Group();g.position.set(x,y,z);g.rotation.set(rx||0,ry||0,rz||0);(p||c).add(g);return g};
+// капсула от точки вдоль +Y: радиус r1 снизу, r2 сверху
+const capGeo=(r1,r2,len,seg)=>{const p=[];for(let i=0;i<=5;i++){const t=-Math.PI/2+i/5*Math.PI/2;p.push(new THREE.Vector2(Math.cos(t)*r1,Math.sin(t)*r1))}for(let i=0;i<=5;i++){const t=i/5*Math.PI/2;p.push(new THREE.Vector2(Math.cos(t)*r2,len+Math.sin(t)*r2))}p[0].x=0;p[p.length-1].x=0;return new THREE.LatheGeometry(p,seg||14)};
+const cap=(r1,r2,len,mat,p)=>mk(capGeo(r1,r2,len),mat,0,0,0,p);
+const folds=(r,len,n,p)=>{for(let i=1;i<=n;i++){const t=mk(new THREE.TorusGeometry(r*(1+rr(-.05,.05)),r*.12,5,16),fold,0,len*i/(n+1),0,p);t.rotation.set(Math.PI/2+rr(-.25,.25),0,rr(-.2,.2))}};
+const sph=(r,mat,x,y,z,p,sx,sy,sz)=>{const m=mk(new THREE.SphereGeometry(r,16,12),mat,x,y,z,p);m.scale.set(sx||1,sy||1,sz||1);return m};
+// ---- таз (сидит на полу у стены; стена по +Z, лицом к -Z)
+sph(.16,S,0,.12,.1,c,1.12,.7,1);
+const bl=mk(new THREE.TorusGeometry(.162,.022,8,26),BK,0,.2,.09);bl.rotation.x=Math.PI/2;bl.scale.set(1.08,.95,1);mk(new THREE.BoxGeometry(.06,.045,.02),M.metal,0,.2,-.075);
+// ---- торс: завален назад на стену и вбок
+const lean=rr(.12,.24)*(R()<.5?-1:1);const tor=G0(0,.19,.1,.36,0,lean);
+{const p=[[0,0],[.15,.0],[.165,.06],[.155,.16],[.165,.28],[.185,.38],[.19,.44],[.16,.5],[.09,.535],[0,.545]].map(v=>new THREE.Vector2(v[0],v[1]));const t=mk(new THREE.LatheGeometry(p,20),S,0,0,0,tor);t.scale.z=.72}
+for(let i=0;i<3;i++){const t=mk(new THREE.TorusGeometry(.16,.012,5,22,Math.PI*1.2),fold,0,.12+i*.09,-.02,tor);t.rotation.set(Math.PI/2+rr(-.15,.15),0,Math.PI*.9+rr(-.3,.3));t.scale.y=.72}
+// нагрудная разгрузка
+const rig=G0(0,.3,-.115,-.08,0,0,tor);mk(new THREE.BoxGeometry(.29,.22,.035),rub,0,0,0,rig);for(const px of[-.095,0,.095]){mk(new THREE.BoxGeometry(.08,.095,.05),S,px,-.03,-.035,rig);mk(new THREE.BoxGeometry(.084,.03,.054),fold,px,.022,-.036,rig)}
+for(const s of[-1,1]){const st=mk(new THREE.BoxGeometry(.04,.26,.012),rub,s*.1,.15,-.02,rig);st.rotation.z=-s*.12}
+mk(new THREE.BoxGeometry(.055,.035,.008),new THREE.MeshBasicMaterial({color:0xc8a020}),.09,.12,-.024,rig);
+// кровь на груди
+const bs=mk(new THREE.CircleGeometry(.09,16),bloodM,-.06,.22,-.128,tor);bs.rotation.y=Math.PI;bs.scale.set(1,1.5,1);
+// ---- капюшон ОЗК + противогаз ГП-5, голова уронена на грудь
+const nk=G0(0,.53,0,-.05,0,0,tor);cap(.055,.05,.06,S,nk);
+const hd=G0(0,.07,-.01,-.55,rr(-.35,.35),-lean*1.6+rr(-.2,.2),nk);
+sph(.122,S,0,.11,.01,hd,1,1.12,1.05);for(let i=0;i<2;i++){const t=mk(new THREE.TorusGeometry(.118,.01,5,20),fold,0,.05+i*.06,.01,hd);t.rotation.x=Math.PI/2+.3}
+const face=sph(.098,rub,0,.105,-.06,hd,.95,1.12,.75);
+for(const ex of[-.043,.043]){const e=G0(ex,.13,-.128,0,ex*1.4,0,hd);mk(new THREE.CylinderGeometry(.031,.031,.02,18),M.metal,0,0,0,e).rotation.x=Math.PI/2;const gl=mk(new THREE.CircleGeometry(.025,18),M.glass,0,0,-.0105,e);gl.rotation.y=Math.PI}
+const can=G0(0,.055,-.13,.9,0,0,hd);mk(new THREE.CylinderGeometry(.03,.034,.03,14),rub,0,0,0,can);mk(new THREE.CylinderGeometry(.042,.042,.075,16),M.metal,0,-.05,0,can);mk(new THREE.CylinderGeometry(.043,.043,.008,16),rub,0,-.02,0,can);
+// гофрированный шланг к сумке
+{const pts=[new THREE.Vector3(0,.02,-.16),new THREE.Vector3(.08,-.12,-.2),new THREE.Vector3(.2,-.3,-.12),new THREE.Vector3(.3,-.45,0)];const cv=new THREE.CatmullRomCurve3(pts);const hg=G0(0,0,0,0,0,0,hd);mk(new THREE.TubeGeometry(cv,24,.016,8,false),rub,0,0,0,hg);for(let i=1;i<14;i++){const p=cv.getPoint(i/14),tn=cv.getTangent(i/14);const r=mk(new THREE.TorusGeometry(.017,.005,4,10),BK,p.x,p.y,p.z,hg);r.lookAt(p.x+tn.x,p.y+tn.y,p.z+tn.z)}}
+// ---- руки
+const glove=(p,open)=>{const h=G0(0,0,0,0,0,0,p);sph(.05,K,0,-.03,0,h,.95,1.15,.62);for(let i=0;i<3;i++){const fg=G0(-.026+i*.026,-.075,0,open?.3:.9,0,0,h);cap(.016,.014,.045,K,fg)}const th=G0(.045,-.035,-.01,.4,0,-.7,h);cap(.017,.015,.04,K,th);const cf=mk(new THREE.CylinderGeometry(.052,.048,.04,14),fold,0,.01,0,h);return h};
+const arm=(k,shR,elR,handOpen)=>{const sh=G0(k*.175,.44,0,shR[0],shR[1],shR[2],tor);sph(.062,S,0,0,0,sh);const up=G0(0,0,0,Math.PI,0,0,sh);cap(.056,.048,.27,S,up);folds(.054,.27,2,up);const el=G0(0,.29,0,elR,0,0,up);sph(.048,fold,0,0,0,el);cap(.048,.042,.24,S,el);folds(.046,.24,2,el);const wr=G0(0,.27,0,Math.PI,0,0,el);glove(wr,handOpen);return sh};
+// левая свисает на пол, правая соскользнула на колени/живот
+arm(-1,[-.25,0,-.32],-.35,true);arm(1,[-.9+rr(-.15,.15),0,.12],-1.25,false);
+// ---- ноги: одна вытянута, другая согнута и завалена вбок
+const bendL=rr(.0,.15),bendR=rr(.55,.8);
+for(const k of[-1,1]){const bend=k<0?bendL:bendR,hp=G0(k*.095,.11,.04,-Math.PI/2+bend,k*(k<0?.1:.22),k*(k<0?0:.35));sph(.075,S,0,0,0,hp);cap(.074,.06,.42,S,hp);folds(.07,.42,3,hp);
+ const kn=G0(0,.43,0,-bend*1.85,0,0,hp);sph(.062,fold,0,0,0,kn);cap(.06,.05,.38,S,kn);folds(.056,.38,2,kn);
+ // бот ОЗК: резиновый, с носком и подошвой, носок завален наружу
+ const ft=G0(0,.4,0,bend*.6,0,k*.5,kn);mk(new THREE.CylinderGeometry(.058,.062,.12,16),rub,0,.02,0,ft);const toe=sph(.062,rub,0,.09,.06,ft,1,.75,1.65);mk(new THREE.BoxGeometry(.12,.028,.27),BK,0,.14,.05,ft).rotation.x=Math.PI/2;mk(new THREE.TorusGeometry(.06,.008,5,16),BK,0,-.04,0,ft).rotation.x=Math.PI/2}
+// ---- лужа и след на стене
+const pool=new THREE.Mesh(new THREE.CircleGeometry(.85,28),splatMat);pool.rotation.x=-Math.PI/2;pool.position.set(.05,.012,-.15);pool.scale.set(1,1.3,1);c.add(pool);
+for(let i=0;i<5;i++){const d=new THREE.Mesh(new THREE.CircleGeometry(rr(.03,.08),12),splatMat);d.rotation.x=-Math.PI/2;d.position.set(rr(-.6,.6),.013,rr(-1.1,-.5));c.add(d)}
+const sm=new THREE.Mesh(new THREE.PlaneGeometry(.55,1.1),smearM);sm.position.set(lean*.3,.75,.27);sm.rotation.y=Math.PI;c.add(sm);
+// ---- вещи вокруг
+const fl2=mk(new THREE.CylinderGeometry(.025,.03,.2,12),M.metal,.42,.03,-.55);fl2.rotation.set(0,0,Math.PI/2);fl2.rotation.y=.7;mk(new THREE.CircleGeometry(.024,12),M.lamp,.52,.03,-.48).rotation.y=-.8;
+const bag=G0(.3,.1,.05,0,.4,.15);mk(new THREE.BoxGeometry(.3,.19,.13),M.fab[1],0,0,0,bag);mk(new THREE.BoxGeometry(.31,.04,.14),fold,0,.08,0,bag);mk(new THREE.BoxGeometry(.03,.25,.135),rub,0,.02,0,bag);
+for(let i=0;i<4;i++){const sc=mk(new THREE.CylinderGeometry(.0045,.0045,.018,6),GM.brass,rr(-.6,.6),.006,rr(-.9,-.3));sc.rotation.z=Math.PI/2;sc.rotation.y=rr(0,3)}
+for(let i=0;i<3;i++){const pp=mk(new THREE.PlaneGeometry(.18,.24),M.paper,rr(-.7,.7),.014+i*.001,rr(-1,-.4));pp.rotation.x=-Math.PI/2;pp.rotation.z=rr(0,3)}
+c.traverse(o=>{if(o.isMesh&&o.material!==splatMat&&o.material!==smearM&&o.material!==bloodM){o.castShadow=true;o.receiveShadow=true}});
 c.position.set(1.72,0,f.corpseZ);c.rotation.y=Math.PI/2;f.corpseDone=true;if(!f.corpseCont)f.corpseCont={name:__T[307],type:'corpse',done:false};f.corpseCont.x=1.2;f.corpseCont.z=f.corpseZ;return c}
 // ===== МНОГОКОМНАТНЫЕ КВАРТИРЫ =====
 const _br2=buildRoom;
@@ -2022,7 +2069,7 @@ const br=Math.min(seg(x,y,z,-.049,.036,.073,-.015,.041,.085,.0038,.0046),seg(x,y
 const D=smin(d,hd,.004);const w=Math.max(0,Math.min(1,(d-hd)/.005+.5));S.d=D;S.c=[col[0]+(hcol[0]-col[0])*w,col[1]+(hcol[1]-col[1])*w,col[2]+(hcol[2]-col[2])*w]}}
 // ---------- торс ----------
 function torsoScene(c){const H=c.H,W=c.W,fat=c.fat||0,fem=c.fem?1:0;const hip=.92*H,waist=1.05*H,chest=1.24*H,sh=1.41*H,neck=1.49*H;const T=hx(c.top),B=hx(c.bot),SK=hx(c.skin);
-return(x,y,z,S)=>{let d=ell(x,y,z,0,hip,0,(.165+fem*.025+fat*.03)*W,.12*H,(.13+fat*.02)*W);d=smin(d,seg(x,y,z,0,hip,0,0,chest,0,(.145+fat*.045)*W,.16*W),.06);if(fat)d=smin(d,sph(x,y,z,0,waist-.03*H,.05*W,(.13+fat*.03)*W),.08);d=smin(d,ell(x,y,z,0,chest,0,.178*W,.15*H,.12*W),.05);if(fem)for(const s of[-1,1])d=smin(d,sph(x,y,z,s*.072*W,chest-.03*H,.075*W,.066*W),.05);for(const s of[-1,1]){d=smin(d,sph(x,y,z,s*.185*W,sh-.045*H,-.005,.058*W),.05);d=smin(d,seg(x,y,z,s*.045*W,neck-.035*H,-.015,s*.16*W,sh-.02*H,-.01,.04*W,.036*W),.045);d=smin(d,seg(x,y,z,s*.02,sh-.035*H,.06*W,s*.14*W,sh-.03*H,.045*W,.011,.011),.025)}d=smin(d,seg(x,y,z,0,sh-.06*H,-.008,0,neck+.075*H,-.014,.044*W,.04*W),.035);
+return(x,y,z,S)=>{let d=ell(x,y,z,0,hip,0,(.165+fem*.025+fat*.03)*W,.12*H,(.13+fat*.02)*W);d=smin(d,seg(x,y,z,0,hip,0,0,chest,0,(.145+fat*.045)*W,.16*W),.06);if(fat)d=smin(d,sph(x,y,z,0,waist-.03*H,.05*W,(.13+fat*.03)*W),.08);d=smin(d,ell(x,y,z,0,chest,0,.178*W,.15*H,.12*W),.05);if(fem)for(const s of[-1,1])d=smin(d,sph(x,y,z,s*.072*W,chest-.03*H,.075*W,.066*W),.05);for(const s of[-1,1]){d=smin(d,sph(x,y,z,s*.185*W,sh-.045*H,-.005,.064*W),.075);d=smin(d,seg(x,y,z,s*.045*W,neck-.035*H,-.015,s*.16*W,sh-.02*H,-.01,.046*W,.042*W),.07);d=smin(d,seg(x,y,z,s*.02,sh-.035*H,.06*W,s*.14*W,sh-.03*H,.045*W,.017,.015),.045)}d=smin(d,seg(x,y,z,0,sh-.06*H,-.008,0,neck+.075*H,-.014,.044*W,.04*W),.035);
 if(c.skirt){let sk2=seg(x,y,z,0,waist,0,0,c.skirt[0]*H/(c.H>.8?1:.72),0,(.15+fat*.03)*W,c.skirt[1]*W);sk2+=.0045*Math.sin(Math.atan2(z,x)*11+y*5)*Math.max(0,(waist-y)/H);d=smin(d,sk2,.05)}if(c.coat)d=smin(d,seg(x,y,z,0,chest,0,0,c.coat*H,0,.18*W,(.19+fat*.02)*W),.03);if(c.shawl){const sw=sx(seg(x,y,z,0,sh+.02,0,0,sh-.2*H,0,.2*W,.29*W),Math.abs(y-(sh-.08*H))-.1*H,.02);d=smin(d,sw,.01)}
 let col=y>(c.coat?c.coat*H:hip+.02*H)?T:B;if(c.skirt&&y<waist)col=hx(c.robe?c.top:c.bot);if(c.waders&&y<chest+.04*H&&Math.abs(x)<.17*W&&!(Math.abs(x)>.09*W&&y>waist+.04))col=hx(c.bot);
 if(c.robe){const q=hash(Math.floor(x*55),Math.floor(y*55),Math.floor(z*55));if(q>.9)col=hx(c.flower[q>.95?0:1])}if(c.dots&&y>waist-.3){const q=Math.hypot(((x*40)%1+1)%1-.5,((y*40)%1+1)%1-.5);if(q<.18)col=hx(c.dots)}
@@ -2043,10 +2090,11 @@ const nzT=canvasTex(128,128,(x,w,h)=>{x.fillStyle='#fff';x.fillRect(0,0,w,h);nz(
 const PM=(c,sh)=>new THREE.MeshPhongMaterial({color:c,map:nzT,shininess:sh||10,specular:0x1a1a18});
 function geo(key,fn){if(!CACHE[key])CACHE[key]=fn();return CACHE[key]}
 const PEND={};let WK=null,wkFail=false;
-function mkGeo(r){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(r.pos,3));g.setAttribute('normal',new THREE.BufferAttribute(r.nor,3));g.setAttribute('color',new THREE.BufferAttribute(r.col,3));g.setIndex(new THREE.BufferAttribute(r.ix,1));g.computeBoundingSphere();return g}
+function mkGeo(r){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(r.pos,3));g.setAttribute('normal',new THREE.BufferAttribute(r.nor,3));g.setAttribute('color',new THREE.BufferAttribute(r.col,3));{const P=r.pos,N=r.nor,I=r.ix;for(let t=0;t<I.length;t+=3){const a=I[t]*3,b=I[t+1]*3,c=I[t+2]*3;const ux=P[b]-P[a],uy=P[b+1]-P[a+1],uz=P[b+2]-P[a+2],vx=P[c]-P[a],vy=P[c+1]-P[a+1],vz=P[c+2]-P[a+2];const fx=uy*vz-uz*vy,fy=uz*vx-ux*vz,fz=ux*vy-uy*vx;const nx=N[a]+N[b]+N[c],ny=N[a+1]+N[b+1]+N[c+1],nz=N[a+2]+N[b+2]+N[c+2];if(fx*nx+fy*ny+fz*nz<0){const k=I[t+1];I[t+1]=I[t+2];I[t+2]=k}}}g.setIndex(new THREE.BufferAttribute(r.ix,1));g.computeBoundingSphere();return g}
 function runLocal(spec){const sc=spec.t==='t'?torsoScene(CF[spec.kind]):spec.t==='h'?headScene(CF[spec.kind]):spec.t==='hand'?handScene():footScene(spec.shoe,spec.shoeC);return SN(sc,spec.b0,spec.b1,spec.h)}
-function worker(){if(WK||wkFail)return WK;try{const S=window.__SDF;let sn=S.SN.toString();const cut=sn.indexOf('const g=new THREE.BufferGeometry()');sn=sn.slice(0,cut)+'return{pos:new Float32Array(pos),nor:new Float32Array(nor),col:new Float32Array(col),ix:(pos.length/3>65535?new Uint32Array(ix):new Uint16Array(ix))}}';const src=['const smin='+S.smin,'const sph='+S.sph,'const ell='+S.ell,'const seg='+S.seg,'const hx='+S.hx,'const hash='+S.hash,'const sx='+sx,S.Sc.toString(),sn,headScene.toString(),torsoScene.toString(),handScene.toString(),footScene.toString(),'const CF='+JSON.stringify(CF),"onmessage=e=>{const{key,spec}=e.data;try{const sc=spec.t==='t'?torsoScene(CF[spec.kind]):spec.t==='h'?headScene(CF[spec.kind]):spec.t==='hand'?handScene():footScene(spec.shoe,spec.shoeC);const r=SN(sc,spec.b0,spec.b1,spec.h);postMessage({key,r},[r.pos.buffer,r.nor.buffer,r.col.buffer,r.ix.buffer])}catch(err){postMessage({key,err:String(err)})}}"].join(';\n');WK=new Worker(URL.createObjectURL(new Blob([src],{type:'application/javascript'})));WK.onmessage=e=>{const{key,r,err}=e.data;if(err){console.warn('[v18d] worker',err);return}CACHE[key]=mkGeo(r);const L2=PEND[key]||[];delete PEND[key];L2.forEach(f=>{try{f(CACHE[key])}catch(x){console.warn(x)}})};WK.onerror=e=>{console.warn('[v18d] worker failed, fallback',e.message);wkFail=true;WK=null;for(const k in PEND){const q=PEND[k];delete PEND[k];setTimeout(()=>{CACHE[k]=CACHE[k]||runLocal(q.spec);q.forEach(f=>f(CACHE[k]))},50)}};}catch(e){console.warn('[v18d] no worker',e);wkFail=true}return WK}
-function need(key,spec,cb){if(CACHE[key])return cb(CACHE[key]);if(PEND[key]){PEND[key].push(cb);return}PEND[key]=[cb];PEND[key].spec=spec;const w=worker();if(w)w.postMessage({key,spec});else setTimeout(()=>{if(!CACHE[key])CACHE[key]=runLocal(spec);const q=PEND[key]||[];delete PEND[key];q.forEach(f=>f(CACHE[key]))},30)}
+function worker(){if(WK||wkFail)return WK;try{const S=window.__SDF;let sn=S.SN.toString();const cut=sn.indexOf('const g=new THREE.BufferGeometry()');sn=sn.slice(0,cut)+'return{pos:new Float32Array(pos),nor:new Float32Array(nor),col:new Float32Array(col),ix:(pos.length/3>65535?new Uint32Array(ix):new Uint16Array(ix))}}';const src=['const smin='+S.smin,'const sph='+S.sph,'const ell='+S.ell,'const seg='+S.seg,'const hx='+S.hx,'const hash='+S.hash,'const sx='+sx,S.Sc.toString(),sn,headScene.toString(),torsoScene.toString(),handScene.toString(),footScene.toString(),'const CF='+JSON.stringify(CF),"onmessage=e=>{const{key,spec}=e.data;try{const sc=spec.t==='t'?torsoScene(CF[spec.kind]):spec.t==='h'?headScene(CF[spec.kind]):spec.t==='hand'?handScene():footScene(spec.shoe,spec.shoeC);const r=SN(sc,spec.b0,spec.b1,spec.h);postMessage({key,r},[r.pos.buffer,r.nor.buffer,r.col.buffer,r.ix.buffer])}catch(err){postMessage({key,err:String(err)})}}"].join(';\n');WK=new Worker(URL.createObjectURL(new Blob([src],{type:'application/javascript'})));WK.onmessage=e=>{const{key,r,err}=e.data;if(err){console.warn('[v18d] worker',err);const q=PEND[key];delete PEND[key];if(q){setTimeout(()=>{try{CACHE[key]=CACHE[key]||runLocal(q.spec)}catch(x){}q.forEach(f=>{try{f(CACHE[key])}catch(y){}})},10)}return}CACHE[key]=mkGeo(r);const L2=PEND[key]||[];delete PEND[key];L2.forEach(f=>{try{f(CACHE[key])}catch(x){console.warn(x)}})};WK.onerror=e=>{console.warn('[v18d] worker failed, fallback',e.message);wkFail=true;WK=null;for(const k in PEND){const q=PEND[k];delete PEND[k];setTimeout(()=>{CACHE[k]=CACHE[k]||runLocal(q.spec);q.forEach(f=>f(CACHE[k]))},50)}};}catch(e){console.warn('[v18d] no worker',e);wkFail=true}return WK}
+function fixOri(g){if(!g||!g.isBufferGeometry||g.userData.ori)return g;g.userData.ori=1;const pa=g.getAttribute('position'),na=g.getAttribute('normal'),ia=g.getIndex();if(!pa||!na||!ia)return g;const P=pa.array,N=na.array,I=ia.array;let ch=0;for(let t=0;t<I.length;t+=3){const a=I[t]*3,b=I[t+1]*3,c=I[t+2]*3;const ux=P[b]-P[a],uy=P[b+1]-P[a+1],uz=P[b+2]-P[a+2],vx=P[c]-P[a],vy=P[c+1]-P[a+1],vz=P[c+2]-P[a+2];if((uy*vz-uz*vy)*(N[a]+N[b]+N[c])+(uz*vx-ux*vz)*(N[a+1]+N[b+1]+N[c+1])+(ux*vy-uy*vx)*(N[a+2]+N[b+2]+N[c+2])<0){const k=I[t+1];I[t+1]=I[t+2];I[t+2]=k;ch=1}}if(ch)ia.needsUpdate=true;return g}
+function need(key,spec,cb){cb=(f=>g=>{try{fixOri(g)}catch(e){}f(g)})(cb);if(CACHE[key])return cb(CACHE[key]);if(PEND[key]){PEND[key].push(cb);return}PEND[key]=[cb];PEND[key].spec=spec;const w=worker();if(w)w.postMessage({key,spec});else setTimeout(()=>{if(!CACHE[key])CACHE[key]=runLocal(spec);const q=PEND[key]||[];delete PEND[key];q.forEach(f=>f(CACHE[key]))},30)}
 window.__npcNeed=need;
 function build(kind){const c=CF[kind]||CF.ded;const H=c.H,W=c.W,ch=c.child?1:0;const g=new THREE.Group(),u=g.userData;const body=new THREE.Group();g.add(body);u.body=body;u.kind=kind;
 const hip=.92*H,sh=1.41*H,neck=1.49*H;let rdy=0;const ready=()=>{if(++rdy>=2)g.visible=true};g.visible=false;{const b0=[-.42*W,(c.skirt?Math.min(c.skirt[0]*H/(c.H>.8?1:.72),hip-.15*H):hip-.16*H)-.03,-.3*W],b1=[.42*W,neck+.08*H,.3*W];need('t_'+kind,{t:'t',kind,b0,b1,h:ch?.0068:.0088},g2=>{body.add(new THREE.Mesh(g2,vmat()));ready()})}
@@ -2253,7 +2301,7 @@ const bm=$('bootMenu'),b=document.createElement('button');b.className='btn';b.id
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function say(t,c){const d=document.createElement('div');d.textContent=t;if(c)d.style.color=c;chat.appendChild(d);while(chat.children.length>6)chat.firstChild.remove();setTimeout(()=>d.style.opacity=0,9000);setTimeout(()=>d.remove(),10200)}
 function panel(msg){ov.classList.add('on');const p=$('mpP');
- if(!window.Peer){p.innerHTML='<h1>'+L('КООПЕРАТИВ','CO-OP')+'</h1><p>'+L('Сетевой модуль не загрузился. Проверьте интернет и обновите страницу.','Network module failed to load. Check your connection and reload.')+'</p><button class="btn" id="mpX">[ OK ]</button>';$('mpX').onclick=()=>ov.classList.remove('on');return}
+ if(false){p.innerHTML='<h1>'+L('КООПЕРАТИВ','CO-OP')+'</h1><p>'+L('Сетевой модуль не загрузился. Проверьте интернет и обновите страницу.','Network module failed to load. Check your connection and reload.')+'</p><button class="btn" id="mpX">[ OK ]</button>';$('mpX').onclick=()=>ov.classList.remove('on');return}
  if(!MP.on){p.innerHTML='<h1>'+L('КООПЕРАТИВ','CO-OP')+'</h1><div class="dim">'+L('До 4 ликвидаторов. Один создаёт комнату, остальные вводят код. Общие этажи и общая сирена.','Up to 4 liquidators. One creates a room, others enter the code. Shared floors and a shared siren.')+'</div><div class="row">'+L('Позывной','Callsign')+': <input id="mpName" maxlength="14" value="'+esc(MP.name)+'"></div><div class="row"><button class="btn" id="mpHost">[ '+L('СОЗДАТЬ КОМНАТУ','CREATE ROOM')+' ]</button></div><div class="row"><input id="mpCode" maxlength="5" placeholder="'+L('КОД','CODE')+'"><button class="btn" id="mpJoin">[ '+L('ВОЙТИ','JOIN')+' ]</button></div><div style="color:var(--bad)">'+(msg?esc(msg):'')+'</div><button class="btn" id="mpX">[ '+L('НАЗАД','BACK')+' ]</button>';
   const nm=()=>{MP.name=($('mpName').value.trim()||L('Ликвидатор','Liquidator')).slice(0,14);store.set('mpName',MP.name)};
   $('mpHost').onclick=()=>{nm();host()};$('mpJoin').onclick=()=>{nm();const c=$('mpCode').value.trim().toUpperCase();if(c.length<4)return panel(L('Введите код комнаты','Enter room code'));join(c)};$('mpX').onclick=()=>ov.classList.remove('on');return}
@@ -2261,38 +2309,37 @@ function panel(msg){ov.classList.add('on');const p=$('mpP');
  p.innerHTML='<h1>'+L('КОМНАТА','ROOM')+'</h1><div class="code">'+MP.code+'</div><div class="dim">'+L('Сообщите код друзьям','Share this code with friends')+'</div><h2>'+L('ОТРЯД','SQUAD')+' ('+ids.length+'/'+MAX+')</h2><div id="mpList">'+ids.map(i=>'<div>◆ '+esc(MP.players[i].name)+(i===MP.me?L(' (вы)',' (you)'):'')+'</div>').join('')+'</div><div class="row">'+(MP.host?'<button class="btn" id="mpGo">[ '+L('НАЧАТЬ СМЕНУ ДЛЯ ВСЕХ','START SHIFT FOR ALL')+' ]</button>':'<span class="dim">'+L('Ждём, пока хост начнёт смену…','Waiting for host to start…')+'</span>')+'<button class="btn" id="mpLeave">[ '+L('ВЫЙТИ','LEAVE')+' ]</button></div>';
  if(MP.host)$('mpGo').onclick=()=>{bcast({t:'start',seed:MP.seed});begin()};$('mpLeave').onclick=()=>leave()}
 function refresh(){if(ov.classList.contains('on'))panel()}
-// ---------- сеть ----------
-const ICE={config:{iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'}]}};
+// ---------- сеть (Trystero: сигналинг через публичные nostr-реле/трекеры, данные P2P) ----------
+const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'}]};
+const SRC=[['nostr','https://esm.sh/trystero@0.21/nostr'],['torrent','https://esm.sh/trystero@0.21/torrent'],['nostr','https://cdn.jsdelivr.net/npm/trystero@0.21/+esm']];
+let LIB=null,NET=null,hostId=null,joinTO=null;
+async function lib(i){i=i||0;if(LIB&&i===0)return LIB;let err;for(let k=i;k<SRC.length;k++){try{const m=await import(SRC[k][1]);if(m&&m.joinRoom){LIB=m;LIB._k=k;return m}}catch(e){err=e}}throw err||new Error('load')}
 function code(){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let c='';for(let i=0;i<5;i++)c+=A[Math.floor(Math.random()*A.length)];return c}
-function host(tries){tries=tries||0;const c=code();const pr=new Peer(PFX+c,ICE);MP.peer=pr;
- pr.on('open',id=>{Object.assign(MP,{on:true,host:true,code:c,me:id,seed:Math.floor(Math.random()*1e9)+1});MP.players={[id]:{name:MP.name,ci:0}};panel()});
- pr.on('error',e=>{if(e.type==='unavailable-id'&&tries<4){pr.destroy();return host(tries+1)}if(!MP.on)panel(L('Ошибка сети: ','Network error: ')+e.type)});
- pr.on('connection',cn=>{cn.on('open',()=>{if(Object.keys(MP.players).length>=MAX){cn.send({t:'full'});setTimeout(()=>cn.close(),300);return}MP.conns[cn.peer]=cn});
-  cn.on('data',d=>onHost(cn,d));cn.on('close',()=>drop(cn.peer));cn.on('error',()=>drop(cn.peer))})}
-function join(c){const pr=new Peer(ICE);MP.peer=pr;let ok=false;
- pr.on('open',id=>{MP.me=id;const cn=pr.connect(PFX+c,{reliable:true});MP.hostConn=cn;
-  const to=setTimeout(()=>{if(!ok){pr.destroy();panel(L('Комната не отвечает','Room not responding'))}},12000);
-  cn.on('open',()=>cn.send({t:'hello',name:MP.name,v:__VERSION}));
-  cn.on('data',d=>{if(d.t==='full'){clearTimeout(to);pr.destroy();return panel(L('Комната заполнена (4/4)','Room is full (4/4)'))}if(d.t==='welcome'){ok=true;clearTimeout(to);Object.assign(MP,{on:true,host:false,code:c,seed:d.seed});if(d.started)begin();}onClient(d)});
-  cn.on('close',()=>{if(MP.on){say(L('Связь с хостом потеряна. Игра продолжается в одиночку.','Lost connection to host. Continuing solo.'),'#e0a030');leave(true)}})});
- pr.on('error',e=>{if(!ok)panel(e.type==='peer-unavailable'?L('Комната не найдена','Room not found'):L('Ошибка сети: ','Network error: ')+e.type)})}
-function bcast(m,except){for(const k in MP.conns)if(k!==except){try{MP.conns[k].open&&MP.conns[k].send(m)}catch(e){}}}
+function busy(t){const p=$('mpP');p.innerHTML='<h1>'+L('КООПЕРАТИВ','CO-OP')+'</h1><p>'+t+'</p><button class="btn" id="mpX">[ '+L('ОТМЕНА','CANCEL')+' ]</button>';$('mpX').onclick=()=>leave()}
+async function openRoom(c){const m=await lib();const room=m.joinRoom({appId:'samosbor1324-v1',rtcConfig:ICE},'room-'+c);const [tx,rx]=room.makeAction('m');NET={room,tx,rx};MP.me=m.selfId;
+ rx((d,id)=>{try{onMsg(id,d)}catch(e){}});
+ room.onPeerJoin(id=>{if(!NET)return;if(MP.host){if(Object.keys(MP.players).length>=MAX&&!MP.players[id]){/* откажем на hello */}}else tx({t:'hello',name:MP.name,v:__VERSION},id)});
+ room.onPeerLeave(id=>{if(!NET)return;if(!MP.host&&id===hostId){say(L('Хост вышел. Игра продолжается в одиночку.','Host left. Continuing solo.'),'#e0a030');leave(true);if(!started)panel(L('Хост закрыл комнату','Host closed the room'));return}drop(id)});return NET}
+async function host(){busy(L('Создаём комнату…','Creating room…'));try{const c=code();await openRoom(c);Object.assign(MP,{on:true,host:true,code:c,seed:Math.floor(Math.random()*1e9)+1});hostId=MP.me;MP.players={[MP.me]:{name:MP.name,ci:0}};panel()}catch(e){leave(true);panel(L('Не удалось загрузить сетевой модуль. Проверьте интернет или отключите блокировщик рекламы.','Could not load the network module. Check your connection or disable ad blockers.'))}}
+async function join(c){busy(L('Ищем комнату ','Looking for room ')+esc(c)+'…<br><span class="dim">'+L('Обычно 3–15 секунд','Usually 3–15 seconds')+'</span>');try{await openRoom(c);MP.code=c;MP.host=false;NET.tx({t:'hello',name:MP.name,v:__VERSION});
+  joinTO=setTimeout(()=>{if(!MP.on){leave(true);panel(L('Комната не найдена или не отвечает. Проверьте код; если код верный, ваши сети могут не соединяться напрямую.','Room not found or not responding. Check the code; if it is right, your networks may not connect directly.'))}},25000)}catch(e){leave(true);panel(L('Не удалось загрузить сетевой модуль. Проверьте интернет или отключите блокировщик рекламы.','Could not load the network module. Check your connection or disable ad blockers.'))}}
+function bcast(m,to){if(!NET)return;try{to?NET.tx(m,to):NET.tx(m)}catch(e){}}
+const send=m=>{if(MP.on)bcast(m)};
 function roster(){return Object.fromEntries(Object.entries(MP.players).map(([k,v])=>[k,{name:v.name,ci:v.ci}]))}
-function onHost(cn,d){if(!d||typeof d!=='object')return;const id=cn.peer;
- if(d.t==='hello'){const used=Object.values(MP.players).map(p=>p.ci);let ci=0;while(used.includes(ci))ci++;MP.players[id]={name:String(d.name||'?').slice(0,14),ci};cn.send({t:'welcome',seed:MP.seed,started:started,me:id});bcast({t:'roster',p:roster()});say('+ '+MP.players[id].name,'#9fd36a');refresh();return}
- if(!MP.players[id])return;
- if(d.t==='s'){d.id=id;upd(d);bcast(d,id);return}
- if(d.t==='chat'){const m={t:'chat',id,txt:String(d.txt).slice(0,120)};show(m);bcast(m,id);return}
- if(d.t==='ev'){d.id=id;evt(d);bcast(d,id)}}
-function onClient(d){if(!d||typeof d!=='object')return;
+function onMsg(id,d){if(!d||typeof d!=='object')return;
+ if(d.t==='hello'){if(!MP.host)return;if(!MP.players[id]){if(Object.keys(MP.players).length>=MAX){bcast({t:'full'},id);return}const used=Object.values(MP.players).map(p=>p.ci);let ci=0;while(used.includes(ci))ci++;MP.players[id]={name:String(d.name||'?').slice(0,14),ci};say('+ '+MP.players[id].name,'#9fd36a')}bcast({t:'welcome',seed:MP.seed,started},id);bcast({t:'roster',p:roster()});refresh();return}
+ if(d.t==='full'){if(!MP.on){clearTimeout(joinTO);leave(true);panel(L('Комната заполнена (4/4)','Room is full (4/4)'))}return}
+ if(d.t==='welcome'){if(MP.host)return;clearTimeout(joinTO);hostId=id;const first=!MP.on;Object.assign(MP,{on:true,seed:d.seed});if(first){panel();if(d.started)begin()}return}
+ if(!MP.host&&id!==hostId&&(d.t==='roster'||d.t==='start'||d.t==='w'))return;
  if(d.t==='roster'){MP.players=d.p;for(const k in avs)if(!d.p[k])rmAv(k);refresh();return}
- if(d.t==='start'){MP.seed=d.seed;begin();return}
- if(d.t==='s'){upd(d);return}
+ if(d.t==='start'){MP.seed=d.seed;if(!started)begin();return}
  if(d.t==='w'){if(G&&G.state&&G.phase){if(G.phase!==d.ph){const nx={calm:'warn',warn:'gas',gas:'calm'};if(nx[G.phase]===d.ph){G.pt=CYC[G.phase]+1}else{G.phase=d.ph;G.pt=d.pt}}else if(Math.abs(G.pt-d.pt)>1.5)G.pt=d.pt}return}
- if(d.t==='chat'){show(d);return}if(d.t==='ev'){evt(d)}}
-function drop(id){delete MP.conns[id];if(MP.players[id]){say('− '+MP.players[id].name,'#e0a030');delete MP.players[id]}rmAv(id);bcast({t:'roster',p:roster()});refresh()}
-function leave(silent){try{MP.peer&&MP.peer.destroy()}catch(e){}for(const k in avs)rmAv(k);Object.assign(MP,{on:false,host:false,code:null,peer:null,conns:{},players:{},hostConn:null});hud.style.display='none';if(!silent)panel()}
-function send(m){if(!MP.on)return;if(MP.host)bcast(m);else if(MP.hostConn&&MP.hostConn.open)try{MP.hostConn.send(m)}catch(e){}}
+ if(!MP.players[id])return;
+ if(d.t==='s'){d.id=id;upd(d);return}
+ if(d.t==='chat'){show({id,txt:String(d.txt).slice(0,120)});return}
+ if(d.t==='ev'){d.id=id;evt(d)}}
+function drop(id){if(MP.players[id]){say('− '+MP.players[id].name,'#e0a030');delete MP.players[id]}rmAv(id);if(MP.host)bcast({t:'roster',p:roster()});refresh()}
+function leave(silent){clearTimeout(joinTO);try{NET&&NET.room.leave()}catch(e){}NET=null;hostId=null;for(const k in avs)rmAv(k);Object.assign(MP,{on:false,host:false,code:null,players:{}});hud.style.display='none';if(!silent)panel()}
 // ---------- старт ----------
 let started=false;
 function begin(){started=true;ov.classList.remove('on');hud.style.display='block';startGame();say(L('Смена началась. Enter: чат','Shift started. Enter: chat'),'#9fd36a')}
@@ -2347,7 +2394,24 @@ addEventListener('keyup',e=>{if(chatting)e.stopImmediatePropagation()},true);
 function close(){chatting=false;cin.blur();cin.style.display='none';if(G&&G.state==='play'&&!document.pointerLockElement)lockPointer()}
 // в коопе время не стоит на паузе у остальных: хост продолжает слать состояние даже в меню
 setInterval(()=>{if(MP.on&&started&&G&&G.state==='pause'){try{tick(.25)}catch(e){}}},250);
-addEventListener('beforeunload',()=>{try{MP.peer&&MP.peer.destroy()}catch(e){}});
+addEventListener('beforeunload',()=>{try{leave(true)}catch(e){}});
 // приглашение по ссылке ?room=CODE
 try{const r=new URLSearchParams(location.search).get('room');if(r){setTimeout(()=>{panel();const i=$('mpCode');if(i)i.value=r.toUpperCase().slice(0,5)},600)}}catch(e){}
 }catch(e){console.warn('[v24]',e)}})();
+
+/* ===== v25: не больше одного жильца каждого вида на этаже ===== */
+(function(){try{
+function dedupe(){const NP=window.__npcList14?window.__npcList14():null;if(!NP||!NP.length)return;const seen=new Set();for(const n of NP.slice()){if(!n||!n.kind)continue;if(!seen.has(n.kind)){seen.add(n.kind);continue}
+ if(n.g&&n.g.parent)n.g.parent.remove(n.g);if(n.potP&&n.potP.parent)n.potP.parent.remove(n.potP);if(n.col)colliders=colliders.filter(k=>k!==n.col);const i=NP.indexOf(n);if(i>=0)NP.splice(i,1)}
+ // старый одиночный жилец (v13b) с тем же видом
+ world.children.slice().forEach(o=>{if(o.isGroup&&o.userData&&o.userData.eyes&&o.userData.lids&&!o.userData.k14npc&&seen.has(o.userData.kind)){world.remove(o)}})}
+window.__dedupe25=dedupe;
+{const s0=window.__npcSpawn;window.__npcSpawn=function(){const r=s0?s0.apply(this,arguments):undefined;try{dedupe()}catch(e){}return r}}
+{const b0=buildFloor;buildFloor=function(){const r=b0.apply(this,arguments);try{dedupe()}catch(e){}return r}}
+let tt=0;{const f0=fxTick;fxTick=function(dt,t){f0(dt,t);tt+=dt;if(tt>1){tt=0;try{dedupe()}catch(e){}}}}
+}catch(e){console.warn('[v25]',e)}})();
+
+/* ===== v26: сторож видимости жильцов ===== */
+(function(){try{let tt=0;
+{const f0=fxTick;fxTick=function(dt,t){f0(dt,t);tt+=dt;if(tt<1)return;tt=0;try{const NP=window.__npcList14?window.__npcList14():[];const now=performance.now();for(const n of NP){if(!n||!n.g||!n.g.parent||n._hid)continue;if(n.g.visible){n._inv=0;continue}if(!n._inv)n._inv=now;else if(now-n._inv>9000){let has=false;n.g.traverse(o=>{if(o.isMesh&&o.geometry&&o.geometry.attributes.position&&o.geometry.attributes.position.count>100)has=true});if(has)n.g.visible=true;n._inv=now}}}catch(e){}}}
+}catch(e){console.warn('[v26]',e)}})();
