@@ -1,0 +1,18 @@
+{
+  "name": "Самосбор: Ликвидатор — Этаж 1324",
+  "short_name": "Самосбор 1324",
+  "start_url": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#030503",
+  "theme_color": "#050604",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
