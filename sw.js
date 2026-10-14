@@ -1,4 +1,4 @@
-const CACHE='samosbor1324-1.5.2';
+const CACHE='samosbor1324-1.6.2';
 // сеть в первую очередь: у всех игроков всегда свежая версия; кэш только для офлайна
 self.addEventListener('install',e=>self.skipWaiting());
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});

@@ -207,7 +207,7 @@ window.__fatal=function(kind){var ru=/^(ru|be|uk|kk)/i.test(navigator.language||
 (function(){var ok=false;try{var c=document.createElement('canvas');ok=!!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')))}catch(e){}
  if(!window.THREE){window.__fatal('three');return}
  if(!ok){window.__fatal('webgl');return}
- document.write('<script src="app.js?v=1.5.2"><\/script>')})();
+ document.write('<script src="app.js?v=1.6.2"><\/script>')})();
 </script>
 <script>
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
